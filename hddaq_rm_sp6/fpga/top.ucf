@@ -1,0 +1,128 @@
+#DB1 (RM)
+NET "ENC[0]"  LOC = "AA14"  ; #1
+NET "ENC[1]"  LOC = "AB15"  ; #2
+NET "ENC[2]"  LOC = "Y15"  ;  #3
+NET "ENC[3]"  LOC = "AB16"  ; #4
+NET "ENC[4]"  LOC = "AA16"  ; #5 
+NET "ENC[5]"  LOC = "AB17"  ; #6
+NET "ENC[6]"  LOC = "Y17"  ;  #7
+NET "ENC[7]"  LOC = "AB18"  ; #8
+NET "ENC[8]"  LOC = "AA18"  ; #9
+NET "ENC[9]"  LOC = "AB19"  ; #10
+NET "ENC[10]"  LOC = "Y19"  ; #12
+NET "ENC[11]"  LOC = "W22"  ; #13
+NET "ENC[12]"  LOC = "V21"  ; #14
+NET "ENC[13]"  LOC = "V22"  ; #15
+ 
+NET "SNC[0]"  LOC = "U22"  ;  #16
+NET "SNC[1]"  LOC = "T21"  ;  #17
+NET "SNC[2]"  LOC = "T22"  ;  #18
+NET "SNC[3]"  LOC = "R22"  ;  #19
+NET "SNC[4]"  LOC = "P20"  ;  #20
+NET "SNC[5]"  LOC = "P21"  ;  #21
+NET "SNC[6]"  LOC = "P22"  ;  #23
+NET "SNC[7]"  LOC = "N22"  ;  #24
+NET "SNC[8]"  LOC = "M20"  ;  #25
+NET "SNC[9]"  LOC = "M21"  ;  #26
+
+NET "LOCK"  LOC = "M22"  ;    #27
+NET "RESERVE_IN"  LOC = "L20"  ; #29 
+NET "RESERVE_OUT"  LOC = "K22"  ;  #31
+NET "BUSY_IN"  LOC = "F21"  ;    #40 
+NET "BUSY_OUT"  LOC = "L22"  ;     #30
+NET "CLEAR"  LOC = "G22"  ;    #38
+NET "TRIG1"  LOC = "F22"  ;    #39
+NET "TRIG2"  LOC = "H20"  ;    #37
+
+#DB2 (NIM IO)
+NET "NIM_IN[0]"  LOC = "B2"  ;  #3
+NET "NIM_IN[1]"  LOC = "B1"  ;  #4
+NET "NIM_IN[2]"  LOC = "C1"  ;  #5
+NET "NIM_IN[3]"  LOC = "C3"  ;  #6
+NET "NIM_IN[4]"  LOC = "D2"  ;  #7
+NET "NIM_IN[5]"  LOC = "D1"  ;  #8
+NET "NIM_IN[6]"  LOC = "E3"  ;  #9
+NET "NIM_IN[7]"  LOC = "E1"  ;  #10
+NET "NIM_IN[8]"  LOC = "F3"  ;  #12
+NET "NIM_IN[9]"  LOC = "F2"  ;  #13
+NET "NIM_IN[10]"  LOC = "F1"  ;  #14
+NET "NIM_IN[11]"  LOC = "G3"  ;  #15
+NET "NIM_IN[12]"  LOC = "G1"  ;  #16
+NET "NIM_IN[13]"  LOC = "H3"  ;  #17
+NET "NIM_IN[14]"  LOC = "H2"  ;  #18
+NET "NIM_IN[15]"  LOC = "H1"  ;  #19
+
+NET "NIM_OUT[0]"  LOC = "L1"  ;  #27
+NET "NIM_OUT[1]"  LOC = "M1"  ;  #28
+NET "NIM_OUT[2]"  LOC = "M2"  ;  #29
+NET "NIM_OUT[3]"  LOC = "M3"  ;  #30
+NET "NIM_OUT[4]"  LOC = "N1"  ;  #31
+NET "NIM_OUT[5]"  LOC = "N3"  ;  #32
+NET "NIM_OUT[6]"  LOC = "P1"  ;  #33
+NET "NIM_OUT[7]"  LOC = "P2"  ;  #34
+NET "NIM_OUT[8]"  LOC = "R3"  ;  #36
+NET "NIM_OUT[9]"  LOC = "R1"  ;  #37
+NET "NIM_OUT[10]"  LOC = "T1"  ;  #38
+NET "NIM_OUT[11]"  LOC = "T2"  ;  #39
+NET "NIM_OUT[12]"  LOC = "T3"  ;  #40
+NET "NIM_OUT[13]"  LOC = "U1"  ;  #41
+NET "NIM_OUT[14]"  LOC = "U3"  ;  #42
+NET "NIM_OUT[15]"  LOC = "V1"  ;  #43
+
+#VME bus
+NET "DATA[0]"  LOC = "W20"  ; 
+NET "DATA[1]"  LOC = "U20"  ;
+NET "DATA[2]"  LOC = "R20"  ;
+NET "DATA[3]"  LOC = "P19"  ; 
+NET "DATA[4]"  LOC = "N19"  ; 
+NET "DATA[5]"  LOC = "M19"  ; 
+NET "DATA[6]"  LOC = "K19"  ; 
+NET "DATA[7]"  LOC = "J20"  ; 
+NET "DATA[8]"  LOC = "J19"  ; 
+NET "DATA[9]"  LOC = "H19"  ;
+NET "DATA[10]"  LOC = "G20"  ; 
+NET "DATA[11]"  LOC = "G19"  ; 
+NET "DATA[12]"  LOC = "F19"  ; 
+NET "DATA[13]"  LOC = "E20"  ; 
+NET "DATA[14]"  LOC = "D19"  ; 
+NET "DATA[15]"  LOC = "C20"  ; 
+NET "DATA[16]"  LOC = "AB14"  ; 
+NET "DATA[17]"  LOC = "AB10"  ; 
+NET "DATA[18]"  LOC = "AA10"  ; 
+NET "DATA[19]"  LOC = "Y9"  ; 
+NET "DATA[20]"  LOC = "AB9"  ; 
+NET "DATA[21]"  LOC = "AB8"  ; 
+NET "DATA[22]"  LOC = "AA8"  ; 
+NET "DATA[23]"  LOC = "Y7"  ; 
+NET "DATA[24]"  LOC = "AB6"  ; 
+NET "DATA[25]"  LOC = "AA6"  ; 
+NET "DATA[26]"  LOC = "AB4"  ; 
+NET "DATA[27]"  LOC = "AA4"  ; 
+NET "DATA[28]"  LOC = "Y4"  ; 
+NET "DATA[29]"  LOC = "W4"  ; 
+NET "DATA[30]"  LOC = "AB3"  ; 
+NET "DATA[31]"  LOC = "Y3"  ;
+
+# CPLD 
+NET "FA[0]"  LOC = "B18"  ;   #OPCS1
+NET "FA[1]"  LOC = "A18"  ;   #OPCS2
+NET "FA[2]"  LOC = "A17"  ;   #OPCS3
+NET "FA[3]"  LOC = "C16"  ;   #OPCS4
+NET "FA[4]"  LOC = "B16"  ;   #OPCS5
+NET "FDTACK"  LOC = "C8"  ;   #OPCS14
+NET "FRS"  LOC = "B14"  ;     #OPCS8
+NET "FWS"  LOC = "A14"  ;     #OPCS9
+NET "SYSCLK"  LOC = "B12"  ;  #OPCS7
+
+#IO
+NET "FIN1"  LOC = "A10"  ; 
+NET "FIN2"  LOC = "B10"  ; 
+NET "FIN3"  LOC = "D11"  ; 
+NET "FIN4"  LOC = "A11"  ; 
+NET "FOUT1"  LOC = "C11"  ; 
+NET "FOUT2"  LOC = "C12"  ; 
+NET "FOUT3"  LOC = "A15"  ; 
+NET "FOUT4"  LOC = "A12"  ; 
+
+NET "SYSCLK" TNM_NET = SYSCLK;
+TIMESPEC TS_SYSCLK = PERIOD "SYSCLK" 32 MHz HIGH 50%;
