@@ -17,16 +17,16 @@
 // Revision 0.01 - File Created
 //          1.00 - First release (K.Hosomi)
 //          1.01 - Add J0 bus (K.Hosomi) 2014/12/05
+//          2.00 - Add NIM IO register function, and Remove J0 bus (K.Hosomi) 2015/09/14
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
 module top(
 		SYSCLK,
+		NIM_IN, NIM_OUT,
 		ENC, SNC, TRIG1, TRIG2,
 		BUSY_IN, BUSY_OUT, CLEAR, LOCK,
 		RESERVE_IN, RESERVE_OUT,
-		BUSY_J0, WARN_J0, CLK_J0, TRIG_J0,
-		STAG_J0, ETAG_J0,
 		FOUT1,FOUT2,FOUT3,FOUT4,
 		FIN1, FIN2, FIN3,FIN4,
 		FRS,FWS,FA,FDTACK,
@@ -53,13 +53,9 @@ module top(
 	output RESERVE_OUT;     // Reserve2
 	output BUSY_OUT;        // Busy output to MTM
 	
-	//FPGA <-> J0-bus
-	input  BUSY_J0;         // Busy from J0 (C1)
-	input  WARN_J0;         // Reserve from J0 (C2)
-	output CLK_J0;          // Clock to J0 (S1)
-	output TRIG_J0;         // Trigger to J0 (S2)
-	output [1:0] STAG_J0;   // Spill Tag to J0 (S3,S4)   
-	output [2:0] ETAG_J0;   // Event Tag to J0 (S5,S6,S7)
+	//DB2
+	input [15:0] NIM_IN;
+	output [15:0] NIM_OUT;
 	
 	//CPLD <-> FPGA
 	input SYSCLK;           //32MHz base clock
@@ -74,11 +70,20 @@ module top(
 //==============================================================================
 //          VME registers
 //==============================================================================
-	reg  [31:0] vme_reg0 =32'd0;
-	reg  [31:0] vme_reg1 =32'd0;
-	reg  [31:0] vme_reg2 =32'd0;
-	reg  [31:0] vme_reg3 =32'd0;
+	reg  [31:0] vme_reg0 =32'd0;  // ro, event number 
+	reg  [31:0] vme_reg1 =32'd0;  // ro, spill number
+	reg  [31:0] vme_reg2 =32'd0;  // ro, serial
+	reg  [31:0] vme_reg3 =32'd0;  // rw, dummy register
+	reg  [31:0] vme_reg4 =32'd0;  // ro, input register
+   //reg  [31:0] vme_reg5 =32'd0;  // wo, reset input register
+   reg  [31:0] vme_reg6 =32'd0;  // rw, level output
+	reg  [31:0] vme_reg7 =32'd0;  // wo, pulse
 
+   //VME signals
+   reg [4:0] fab=5'd0;
+	reg [1:0] fwsb_e=2'd0;
+	reg [1:0] frsb_e=2'd0; 
+  
 //==============================================================================
 //          signal assign
 //==============================================================================
@@ -88,10 +93,10 @@ module top(
 	assign FOUT4       = RESERVE_IN;
 
    assign RESERVE_OUT = FIN4;
-	assign BUSY_OUT    = BUSY_IN | ~BUSY_J0;
+	assign BUSY_OUT    = BUSY_IN;
 	
 	wire strig2;
-	async_input_sync sync1(SYSCLK, TRIG2, strig2);
+	async_input_sync sync_trig2(SYSCLK, TRIG2, strig2);
 
    //Event and Spill tag
 	reg [1:0] trig2_e=2'd0;
@@ -106,23 +111,40 @@ module top(
 		end
 	end
 	
-	//J0 bus
-	assign CLK_J0      = SYSCLK;
-	assign TRIG_J0     = TRIG2;
-   assign STAG_J0     = SNC[1:0];
-	assign ETAG_J0     = ENC[4:2];
+	// NIM input register
+   wire in1,in2,in3,in4,in5,in6,in7,in8,in9,in10,in11,in12,in13,in14,in15,in16;
+	async_input_sync sync_in1(SYSCLK, NIM_IN[0], in1);
+   async_input_sync sync_in2(SYSCLK, NIM_IN[1], in2);
+	async_input_sync sync_in3(SYSCLK, NIM_IN[2], in3);
+	async_input_sync sync_in4(SYSCLK, NIM_IN[3], in4);
+	async_input_sync sync_in5(SYSCLK, NIM_IN[4], in5);
+	async_input_sync sync_in6(SYSCLK, NIM_IN[5], in6);
+	async_input_sync sync_in7(SYSCLK, NIM_IN[6], in7);
+	async_input_sync sync_in8(SYSCLK, NIM_IN[7], in8);
+	async_input_sync sync_in9(SYSCLK, NIM_IN[8], in9);
+	async_input_sync sync_in10(SYSCLK, NIM_IN[9], in10);
+	async_input_sync sync_in11(SYSCLK, NIM_IN[10], in11);
+	async_input_sync sync_in12(SYSCLK, NIM_IN[11], in12);
+	async_input_sync sync_in13(SYSCLK, NIM_IN[12], in13);
+	async_input_sync sync_in14(SYSCLK, NIM_IN[13], in14);
+	async_input_sync sync_in15(SYSCLK, NIM_IN[14], in15);
+	async_input_sync sync_in16(SYSCLK, NIM_IN[15], in16);
+	
+	always @ (posedge SYSCLK) begin
+	   if( fwsb_e==2'b01 && fab==5'd5 ) vme_reg4 <= 32'd0;
+		else vme_reg4 <= vme_reg4 | {16'd0,in16,in15,in14,in13,in12,in11,in10,in9,in8,in7,in6,in5,in4,in3,in2,in1};
+	end
+
+   // NIM output (level or pulse)
+   assign NIM_OUT = vme_reg6[15:0] | vme_reg7[15:0];
 
 //==============================================================================
 //          VME cycle
 //==============================================================================
 	
 	wire sfwsb, sfrsb;
-	async_input_sync sync2(SYSCLK, FWS, sfwsb);
-	async_input_sync sync3(SYSCLK, FRS, sfrsb);
-	
-	reg [4:0] fab=5'd0;
-	reg [1:0] fwsb_e=2'd0;
-	reg [1:0] frsb_e=2'd0;
+	async_input_sync sync_fws(SYSCLK, FWS, sfwsb);
+	async_input_sync sync_frs(SYSCLK, FRS, sfrsb);
 	
 	always @ (posedge SYSCLK) begin
 		fab    <= FA;
@@ -134,6 +156,11 @@ module top(
 	always @ ( posedge SYSCLK ) begin
 		if( fwsb_e==2'b01 ) begin
 			if(fab==5'd3) vme_reg3 <= DATA;
+			else if(fab==5'd6) vme_reg6 <= DATA;
+			else if(fab==5'd7) vme_reg7 <= DATA;
+		end
+		else begin
+			vme_reg7 <= 32'd0;
 		end
 	end
 
@@ -142,14 +169,16 @@ module top(
 	always @ ( posedge SYSCLK ) begin
 		if( frsb_e==2'b01 ) begin
 			case ( fab )
-				5'd0  : out_data = vme_reg0;
-				5'd1  : out_data = vme_reg1;
+				5'd0  : out_data <= vme_reg0;
+				5'd1  : out_data <= vme_reg1;
 				5'd2  : begin
-				        vme_reg2 = vme_reg2 + 32'd1;
-				        out_data = vme_reg2;
+				        vme_reg2 <= vme_reg2 + 32'd1;
+				        out_data <= vme_reg2;
 						  end
-				5'd3  : out_data = vme_reg3;
-				default: out_data = 32'hFEFEFEFE;
+				5'd3  : out_data <= vme_reg3;
+				5'd4  : out_data <= vme_reg4;
+				5'd6  : out_data <= vme_reg6;
+				default: out_data <= 32'hFEFEFEFE;
 			endcase
 		end
 	end
