@@ -19,6 +19,7 @@
 //          1.01 - 16 VME registers are added. (K.Hosomi)
 //          1.02 - Remove Front panel reset switch from CPLD to FPGA (K.Hosomi)
 //          1.03 - 20140930 - Change timing of VME Strobe (K.Hosomi)
+//          2.00 - 20160328 - Asynchronous circuit for low latency (K.Hosomi)
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -56,31 +57,6 @@ module top(
 	 output FWS, FRS;                      //Write or Read strobe going to FPGA
 	 output [4:0] FA;                      //Address going to FPGA
 	 
-//================================================================================
-//   Syncronazation of VME Input signals with SYSCLOCK
-//================================================================================
-	
-	reg swrite;
-	reg sas;
-   reg sds0, sds1;
-	reg siack;
-	reg slword;
-	reg [5:0] sam;
-	reg [15:1] sa;
-	reg seq1, seq2;
-	
-	always @ (posedge SYSCLK) begin
-		    swrite <= WRITE;
-			 sas    <= AS;
-			 sds0   <= DS0;
-			 sds1   <= DS1;
-			 siack  <= IACK;
-			 slword <= LWORD;
-			 sam    <= AM;
-			 sa     <= A;
-			 seq1   <= EQ1;
-			 seq2   <= EQ2;
-	end
 
 //================================================================================
 //   VME Access
@@ -106,44 +82,46 @@ module top(
 //        + 0x7C        31
 //      
 //   <Comment>
-//   VME bus error is not equipped. 
+//   VME bus error is not implemented.
 //   Irregular access may result in VME bus timeout.
 //================================================================================
 
-	//Board Address Decode
+	//VME Address
 	wire adrdec;
-	assign adrdec = ((sas==1'b0) && (siack==1'b1) && (seq1==1'b0) && (seq2==1'b0)); 
+	vme_address_decode vme_address_decode(AS, IACK, EQ1, EQ2, adrdec);
 	
-	//Address Modifier Decode
+	//Address Modifier
 	wire amdec;
-	assign amdec = ((sam==6'h09) || (sam==6'h0A) || (sam==6'h0D) || (sam==6'h0E));
+	address_modifier_decode address_modifier_decode(AM, amdec); 
 	
-	//Data word Decode 
+	//Data Word
 	wire d32;
-	assign d32 = ((slword==1'b0) && (sa[1]==1'b0) && (sds0==1'b0) && (sds1==1'b0)); 
+	data_word_decode data_word_decode(LWORD, A[1], DS0, DS1, d32);
 	
-	//Strobe
-	wire str = ((adrdec==1'b1) && (amdec==1'b1) && (d32==1'b1));
-	
-	reg read_str;
-	reg write_str;
-	always @ (posedge SYSCLK) begin
-			read_str  <= ((str==1'b1) && (swrite==1'b1));
-			write_str <= ((str==1'b1) && (swrite==1'b0));
-	end
-	
-	//Tranciever Enable & Direction
-	assign RWD8  = ~str;
-	assign RWD16 = ~str;
-	assign RWD32 = ~str;
-	
-	assign UHDIR = ~swrite;
-	assign ULDIR = ~swrite;
-	assign LHDIR = ~swrite;
-	assign LLDIR = ~swrite;
+	//Access Check
+	wire enable;
+	access_check access_check(adrdec, amdec, d32, enable);
 	
 	//VME bus error
 	assign BERR = 1'b1;
+	
+	//Strobe
+	wire read_str;
+	assign read_str = ((enable==1'b1) && (WRITE==1'b1));
+	
+	wire write_str;
+	assign write_str = ((enable==1'b1) && (WRITE==1'b0));
+	
+	//Tranciever Enable & Direction
+	assign RWD8  = ~enable;
+	assign RWD16 = ~enable;
+	assign RWD32 = ~enable;
+	
+	assign UHDIR = ~WRITE;
+	assign ULDIR = ~WRITE;
+	assign LHDIR = ~WRITE;
+	assign LLDIR = ~WRITE;
+	
 	
 //================================================================================
 //   Signal assignement CPLD <-> FPGA
@@ -152,6 +130,30 @@ module top(
 	assign DTACK = FDTACK;
    assign FRS = read_str;
 	assign FWS = write_str;
-	assign FA = sa[6:2];
+	assign FA = A[6:2];
 	
+endmodule
+
+module vme_address_decode(AS, IACK, EQ1, EQ2, OUT);
+	input AS, IACK, EQ1, EQ2;
+	output OUT;
+	assign OUT = ((AS==1'b0) && (IACK==1'b1) && (EQ1==1'b0) && (EQ2==1'b0)); 
+endmodule
+
+module address_modifier_decode(AM, OUT);
+	input [5:0] AM;
+	output OUT;
+	assign OUT = ((AM==6'h09) || (AM==6'h0A) || (AM==6'h0D) || (AM==6'h0E));
+endmodule
+
+module data_word_decode(LWORD, A01, DS0, DS1, OUT);
+	input LWORD, A01, DS0, DS1;
+	output OUT;
+	assign OUT = ((LWORD==1'b0) && (A01==1'b0) && (DS0==1'b0) && (DS1==1'b0));
+endmodule
+
+module access_check(ADDR, AM, DWORD, OK);
+	input ADDR, AM, DWORD;
+	output OK;
+	assign OK = ((ADDR==1'b1) && (AM==1'b1) && (DWORD==1'b1));
 endmodule
