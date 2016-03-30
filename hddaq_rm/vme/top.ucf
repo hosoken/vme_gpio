@@ -33,6 +33,7 @@ NET "BUSY_OUT"  LOC = "P139"  ;  #30
 NET "CLEAR"  LOC = "P149"  ;  #38
 NET "TRIG1"  LOC = "P152"  ;  #39
 NET "TRIG2"  LOC = "P147"  ;  #37
+NET "SNINC"  LOC = "P146"  ;  #36
 
 #DB2 (NIM IO)
 NET "NIM_IN[0]"  LOC = "P5"  ;  #3
