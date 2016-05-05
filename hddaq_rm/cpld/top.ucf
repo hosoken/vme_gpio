@@ -43,13 +43,13 @@ NET "RWD32"  LOC = "P107"  ;
 
 NET "SYSCLK"  LOC = "P30"  ; 
 
-#CPLD <-> FPGA
-NET "FA<0>"  LOC = "P116"  ; 
-NET "FA<1>"  LOC = "P115"  ; 
-NET "FA<2>"  LOC = "P113"  ; 
-NET "FA<3>"  LOC = "P112"  ; 
-NET "FA<4>"  LOC = "P102"  ;
-NET "FDTACK"  LOC = "P92"  ; 
-NET "FRS"  LOC = "P98"  ; 
-NET "FWS"  LOC = "P97"  ;
-NET "FSYSCLK"  LOC = "P100"  ; 
+#FPGA
+NET "FA<0>"  LOC = "P116"  ;   #OPCS1
+NET "FA<1>"  LOC = "P115"  ;   #OPCS2
+NET "FA<2>"  LOC = "P113"  ;   #OPCS3
+NET "FA<3>"  LOC = "P112"  ;   #OPCS4
+NET "FA<4>"  LOC = "P102"  ;   #OPCS5
+NET "FDTACK"  LOC = "P92"  ;   #OPCS14
+NET "FRS"  LOC = "P98"  ;      #OPCS8
+NET "FWS"  LOC = "P97"  ;      #OPCS9
+NET "FSYSCLK"  LOC = "P100"  ; #OPCS7
