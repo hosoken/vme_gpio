@@ -6,46 +6,50 @@ NET "A<5>"  LOC = "P15"  ;
 NET "A<6>"  LOC = "P14"  ; 
 NET "A<7>"  LOC = "P13"  ; 
 NET "A<8>"  LOC = "P40"  ; 
-NET "A<9>"  LOC = "P39"  ; 
+NET "A<9>"  LOC = "P39"  ;
 NET "A<10>"  LOC = "P35"  ; 
 NET "A<11>"  LOC = "P34"  ; 
 NET "A<12>"  LOC = "P33"  ; 
 NET "A<13>"  LOC = "P31"  ; 
 NET "A<14>"  LOC = "P28"  ; 
-NET "A<15>"  LOC = "P27"  ; 
+NET "A<15>"  LOC = "P27"  ;
+
 NET "AM<0>"  LOC = "P21"  ; 
 NET "AM<1>"  LOC = "P22"  ; 
 NET "AM<2>"  LOC = "P23"  ; 
 NET "AM<3>"  LOC = "P24"  ; 
 NET "AM<4>"  LOC = "P12"  ; 
-NET "AM<5>"  LOC = "P26"  ; 
-NET "AS"  LOC = "P10"  ; 
-NET "BERR"  LOC = "P48"  ; 
+NET "AM<5>"  LOC = "P26"  ;
+
+NET "AS"  LOC = "P10"  ;
 NET "DS0"  LOC = "P7"  ; 
-NET "DS1"  LOC = "P4"  ; 
-NET "DTACK"  LOC = "P46"  ; 
+NET "DS1"  LOC = "P4"  ;
+NET "WRITE"  LOC = "P9"  ;
+NET "IACK"  LOC = "P11"  ;
+NET "LWORD"  LOC = "P25"  ; 
+NET "DTACK"  LOC = "P46"  ;
+NET "BERR"  LOC = "P48"  ; 
+
 NET "EQ1"  LOC = "P44"  ; 
-NET "EQ2"  LOC = "P43"  ; 
-NET "FA<0>"  LOC = "P116"  ;  #OPCS1
-NET "FA<1>"  LOC = "P115"  ;  #OPCS2
-NET "FA<2>"  LOC = "P113"  ;  #OPCS3
-NET "FA<3>"  LOC = "P112"  ;  #OPCS4
-NET "FA<4>"  LOC = "P102"  ;  #OPCS5
-NET "FDTACK"  LOC = "P92"  ;  #OPCS14
-NET "FRS"  LOC = "P98"  ;     #OPCS8
-NET "FSYSCLK"  LOC = "P100"  ;  #OPCS7
-NET "FWS"  LOC = "P97"  ;     #OPCS9
-NET "IACK"  LOC = "P11"  ; 
+NET "EQ2"  LOC = "P43"  ;
+
 NET "LHDIR"  LOC = "P104"  ; 
 NET "LLDIR"  LOC = "P103"  ; 
-NET "LWORD"  LOC = "P25"  ; 
-NET "RWD16"  LOC = "P110"  ; 
-NET "RWD32"  LOC = "P107"  ; 
-NET "RWD8"  LOC = "P111"  ; 
-NET "SYSCLK"  LOC = "P30"  ; 
 NET "UHDIR"  LOC = "P106"  ; 
 NET "ULDIR"  LOC = "P105"  ; 
-NET "WRITE"  LOC = "P9"  ; 
+NET "RWD8"  LOC = "P111"  ; 
+NET "RWD16"  LOC = "P110"  ; 
+NET "RWD32"  LOC = "P107"  ; 
 
-NET "SYSCLK" TNM_NET = SYSCLK;
-TIMESPEC TS_SYSCLK = PERIOD "SYSCLK" 32 MHz HIGH 50%;
+NET "SYSCLK"  LOC = "P30"  ; 
+
+#FPGA
+NET "FA<0>"  LOC = "P116"  ;   #OPCS1
+NET "FA<1>"  LOC = "P115"  ;   #OPCS2
+NET "FA<2>"  LOC = "P113"  ;   #OPCS3
+NET "FA<3>"  LOC = "P112"  ;   #OPCS4
+NET "FA<4>"  LOC = "P102"  ;   #OPCS5
+NET "FDTACK"  LOC = "P92"  ;   #OPCS14
+NET "FRS"  LOC = "P98"  ;      #OPCS8
+NET "FWS"  LOC = "P97"  ;      #OPCS9
+NET "FSYSCLK"  LOC = "P100"  ; #OPCS7
